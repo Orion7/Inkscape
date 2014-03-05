@@ -1,4 +1,0 @@
-Inkscape
-========
-
-Inkscape distributive
