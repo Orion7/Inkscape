@@ -785,6 +785,8 @@ function effect(dir)
 			done &= appear(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
 		else if (effectArray[counter]["effect"] == "pop")
 			done &= pop(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
+		else if (effectArray[counter]["effect"] == "motion")
+			done &= motion(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
 		else if (effectArray[counter]["effect"] == "view")
 			done &= view(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
 	}
@@ -1326,6 +1328,8 @@ function slideUpdateExportLayer()
 						appear(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);	
 					else if (effect["effect"] == "pop")
 						pop(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "motion")
+						motion(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);
 					else if (effect["effect"] == "view")
 						view(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);	
 				}
@@ -1880,6 +1884,71 @@ function pop(dir, element, time, options)
 	return false;
 }
 
+/** The motion effect.
+ *
+ *  @param dir direction the effect should be played (1 = forwards, -1 = backwards)
+ *  @param element the element the effect should be applied to
+ *  @param time the time that has elapsed since the beginning of the effect
+ *  @param options a dictionary with additional options (e.g. length of the effect)
+ */
+function motion(dir, element, time, options)
+{
+	var length = 500;
+	var fraction;
+
+	if ((time == STATE_END) || (time == STATE_START))
+		fraction = 1;
+	else
+	{
+		if (options && options["length"])
+			length = options["length"];
+
+		fraction = time / length;
+	}
+
+	if (dir == 1)
+	{
+		if (fraction <= 0)
+		{
+			element.setAttribute("transform", "translate(0, 0)");
+			element.style.display = "none";
+		}
+		else if (fraction >= 1)
+		{
+			element.removeAttribute("transform");
+			element.style.display = "inherit";
+			return true;
+		}
+		else
+		{
+			element.style.display = "inherit";
+			var offsetX = 600 * fraction;
+			var offsetY = 200*Math.sin(offsetX/60);
+			element.setAttribute("transform", "translate(" + offsetX + "," + offsetY + ")");
+		}
+	}
+	else if (dir == -1)
+	{
+		if (fraction <= 0)
+		{
+			element.setAttribute("transform", "scale(1)");
+			element.style.display = "inherit";
+		}
+		else if (fraction >= 1)
+		{
+			element.removeAttribute("transform");
+			element.style.display = "none";
+			return true;
+		}
+		else
+		{
+			element.setAttribute("transform", "scale(" + 1 - fraction + ")");
+			element.style.display = "inherit";
+		}
+	}
+	return false;
+}
+
 /** Function to set a slide either to the start or the end state.
  *  
  *  @param slide the slide to use
@@ -1904,6 +1973,8 @@ function setSlideToState(slide, state)
 						appear(effect["dir"], effect["element"], STATE_END, effect["options"]);	
 					else if (effect["effect"] == "pop")
 						pop(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "motion")
+						motion(effect["dir"], effect["element"], STATE_END, effect["options"]);	
 					else if (effect["effect"] == "view")
 						view(effect["dir"], effect["element"], STATE_END, effect["options"]);	
 				}
@@ -1922,6 +1993,8 @@ function setSlideToState(slide, state)
 						appear(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);	
 					else if (effect["effect"] == "pop")
 						pop(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);	
+					else if (effect["effect"] == "motion")
+						motion(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);
 					else if (effect["effect"] == "view")
 						view(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);	
 				}
@@ -1942,6 +2015,8 @@ function setSlideToState(slide, state)
 						appear(effect["dir"], effect["element"], STATE_END, effect["options"]);	
 					else if (effect["effect"] == "pop")
 						pop(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "motion")
+						motion(effect["dir"], effect["element"], STATE_END, effect["options"]);
 					else if (effect["effect"] == "view")
 						view(effect["dir"], effect["element"], STATE_END, effect["options"]);	
 				}
