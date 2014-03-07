@@ -67,7 +67,6 @@ class JessyInk_Effects(inkex.Effect):
 		
 			if (self.options.effectOut == "appear") or (self.options.effectOut == "fade") or (self.options.effectOut == "pop") or (self.options.effectIn == "motion"):
 				node.set("{" + inkex.NSS["jessyink"] + "}effectOut","name:" + self.options.effectOut  + ";order:" + self.options.effectOutOrder + ";length:" + str(int(self.options.effectOutDuration * 1000)) + ";pathid:" + self.options.PathOutId)
-				node.set("{" + inkex.NSS["jessyink"] + "}effectOut","name:" + self.options.effectOut  + ";order:" + self.options.effectOutOrder + ";length:" + str(int(self.options.effectOutDuration * 1000)) + ";pathid:" + self.options.PathOutId)
 				# Remove possible view argument.
 				if node.attrib.has_key("{" + inkex.NSS["jessyink"] + "}view"):
 					del node.attrib["{" + inkex.NSS["jessyink"] + "}view"]
