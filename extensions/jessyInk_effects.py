@@ -40,7 +40,9 @@ class JessyInk_Effects(inkex.Effect):
 		self.OptionParser.add_option('--effectOutOrder', action = 'store', type = 'string', dest = 'effectOutOrder', default = 2)
 		self.OptionParser.add_option('--effectOutDuration', action = 'store', type = 'float', dest = 'effectOutDuration', default = 0.8)
 		self.OptionParser.add_option('--effectOut', action = 'store', type = 'string', dest = 'effectOut', default = 'none')
-
+		self.OptionParser.add_option('--PathInId', action = 'store', type = 'string', dest = 'PathInId', default = '')
+		self.OptionParser.add_option('--PathOutId', action = 'store', type = 'string', dest = 'PathOutId', default = '')
+		
 		inkex.NSS[u"jessyink"] = u"https://launchpad.net/jessyink"
 
 	def effect(self):
@@ -55,7 +57,7 @@ class JessyInk_Effects(inkex.Effect):
 
 		for id, node in self.selected.items():
 			if (self.options.effectIn == "appear") or (self.options.effectIn == "fade") or (self.options.effectIn == "pop") or (self.options.effectIn == "motion"):
-				node.set("{" + inkex.NSS["jessyink"] + "}effectIn","name:" + self.options.effectIn  + ";order:" + self.options.effectInOrder + ";length:" + str(int(self.options.effectInDuration * 1000)))
+				node.set("{" + inkex.NSS["jessyink"] + "}effectIn","name:" + self.options.effectIn  + ";order:" + self.options.effectInOrder + ";length:" + str(int(self.options.effectInDuration * 1000)) + ";pathid:" + self.options.PathInId)
 				# Remove possible view argument.
 				if node.attrib.has_key("{" + inkex.NSS["jessyink"] + "}view"):
 					del node.attrib["{" + inkex.NSS["jessyink"] + "}view"]
@@ -64,7 +66,8 @@ class JessyInk_Effects(inkex.Effect):
 					del node.attrib["{" + inkex.NSS["jessyink"] + "}effectIn"]
 		
 			if (self.options.effectOut == "appear") or (self.options.effectOut == "fade") or (self.options.effectOut == "pop") or (self.options.effectIn == "motion"):
-				node.set("{" + inkex.NSS["jessyink"] + "}effectOut","name:" + self.options.effectOut  + ";order:" + self.options.effectOutOrder + ";length:" + str(int(self.options.effectOutDuration * 1000)))
+				node.set("{" + inkex.NSS["jessyink"] + "}effectOut","name:" + self.options.effectOut  + ";order:" + self.options.effectOutOrder + ";length:" + str(int(self.options.effectOutDuration * 1000)) + ";pathid:" + self.options.PathOutId)
+				node.set("{" + inkex.NSS["jessyink"] + "}effectOut","name:" + self.options.effectOut  + ";order:" + self.options.effectOutOrder + ";length:" + str(int(self.options.effectOutDuration * 1000)) + ";pathid:" + self.options.PathOutId)
 				# Remove possible view argument.
 				if node.attrib.has_key("{" + inkex.NSS["jessyink"] + "}view"):
 					del node.attrib["{" + inkex.NSS["jessyink"] + "}view"]

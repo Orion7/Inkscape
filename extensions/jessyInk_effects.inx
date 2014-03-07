@@ -16,6 +16,7 @@
         <_option value="pop">Pop</_option>
         <_option value="motion">Motion</_option>
 			</param>
+			<param name="PathInId" type="string" _gui-text="Path in id:"></param>
 			<_param name="effectOutLabel" type="description">Build-out effect</_param>
 			<param name="effectOutOrder" type="int" min="1" max="100" _gui-text="Order:">1</param>
 			<param name="effectOutDuration" precision="1" type="float" min="0.1" max="10.0" _gui-text="Duration in seconds:">0.8</param>
@@ -26,6 +27,7 @@
         <_option value="pop">Pop</_option>
         <_option value="motion">Motion</_option>
 			</param>
+			<param name="PathOutId" type="string" _gui-text="Path out id:"></param>
 		</page>
     <page name="help" _gui-text="Help">
       <_param name="help_text" type="description">This extension allows you to install, update and remove object effects for a JessyInk presentation. Please see code.google.com/p/jessyink for more details.</_param>
