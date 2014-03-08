@@ -57,11 +57,17 @@ class JessyInk_Install(inkex.Effect):
 			node.getparent().remove(node)
 	
 		# Create new script node
+		D3Script = inkex.etree.Element(inkex.addNS("script", "svg"))
+		D3Script.set("src", "http://d3js.org/d3.v3.min.js")
+		D3Script.set("charset", "utf-8")
+		self.document.getroot().append(D3Script)
+		
 		scriptElm = inkex.etree.Element(inkex.addNS("script", "svg"))
 		scriptElm.text = open(os.path.join(os.path.dirname(__file__),	"jessyInk.js")).read()
 		scriptElm.set("id","JessyInk")
 		scriptElm.set("{" + inkex.NSS["jessyink"] + "}version", '1.5.5')
 		self.document.getroot().append(scriptElm)
+		
 
 		# Remove "jessyInkInit()" in the "onload" attribute, if present.
 		if self.document.getroot().get("onload"):

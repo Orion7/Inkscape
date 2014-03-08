@@ -1931,19 +1931,21 @@ function motion(dir, element, time, options)
 	{
 		if (fraction <= 0)
 		{
-			element.setAttribute("transform", "scale(1)");
-			element.style.display = "inherit";
+			element.setAttribute("transform", "translate(0, 0)");
+			element.style.display = "none";
 		}
 		else if (fraction >= 1)
 		{
 			element.removeAttribute("transform");
-			element.style.display = "none";
+			element.style.display = "inherit";
 			return true;
 		}
 		else
 		{
-			element.setAttribute("transform", "scale(" + 1 - fraction + ")");
 			element.style.display = "inherit";
+			var offsetX = 600 * fraction;
+			var offsetY = 200*Math.sin(offsetX/60);
+			element.setAttribute("transform", "translate(" + offsetX + "," + offsetY + ")");
 		}
 	}
 	return false;
