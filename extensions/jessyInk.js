@@ -1895,7 +1895,17 @@ function motion(dir, element, time, options)
 {
 	var length = 500;
 	var fraction;
-
+	var svg = d3.select("svg");
+	var path = svg.select("#" + options["pathid"]),
+	startPoint = pathStartPoint(path);
+	var l = path.node().getTotalLength();
+	
+	function pathStartPoint(path) {
+		var d = path.attr("d"),
+		dsplitted = d.split(" ");
+		return dsplitted[1].split(",");
+	}
+	
 	if ((time == STATE_END) || (time == STATE_START))
 		fraction = 1;
 	else
@@ -1910,7 +1920,7 @@ function motion(dir, element, time, options)
 	{
 		if (fraction <= 0)
 		{
-			element.setAttribute("transform", "translate(0, 0)");
+			element.setAttribute("transform", "translate(" + startPoint + ")");
 			element.style.display = "none";
 		}
 		else if (fraction >= 1)
@@ -1922,16 +1932,15 @@ function motion(dir, element, time, options)
 		else
 		{
 			element.style.display = "inherit";
-			var offsetX = 600 * fraction;
-			var offsetY = 200*Math.sin(offsetX/60);
-			element.setAttribute("transform", "translate(" + offsetX + "," + offsetY + ")");
+			var p = path.node().getPointAtLength(fraction * l);
+			element.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
 		}
 	}
 	else if (dir == -1)
 	{
 		if (fraction <= 0)
 		{
-			element.setAttribute("transform", "translate(0, 0)");
+			element.setAttribute("transform", "translate(" + startPoint + ")");
 			element.style.display = "none";
 		}
 		else if (fraction >= 1)
@@ -1943,9 +1952,8 @@ function motion(dir, element, time, options)
 		else
 		{
 			element.style.display = "inherit";
-			var offsetX = 600 * fraction;
-			var offsetY = 200*Math.sin(offsetX/60);
-			element.setAttribute("transform", "translate(" + offsetX + "," + offsetY + ")");
+			var p = path.node().getPointAtLength(l - fraction * l);
+			element.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
 		}
 	}
 	return false;
