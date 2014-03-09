@@ -50,16 +50,19 @@ class JessyInk_Install(inkex.Effect):
 		self.OptionParser.add_option('--tab', action = 'store', type = 'string', dest = 'what')
 
 		inkex.NSS[u"jessyink"] = u"https://launchpad.net/jessyink"
+		inkex.NSS[u"xlink"]= u"http://www.w3.org/1999/xlink"
 
 	def effect(self):
 		# Find and delete old script node
 		for node in self.document.xpath("//svg:script[@id='JessyInk']", namespaces=inkex.NSS):
 			node.getparent().remove(node)
+			
+		for node in self.document.xpath("//svg:script[@xlink:href='http://d3js.org/d3.v3.min.js']", namespaces=inkex.NSS):
+			node.getparent().remove(node)
 	
 		# Create new script node
 		D3Script = inkex.etree.Element(inkex.addNS("script", "svg"))
-		D3Script.set("src", "http://d3js.org/d3.v3.min.js")
-		D3Script.set("charset", "utf-8")
+		D3Script.set("{" + inkex.NSS["xlink"] + "}href", "http://d3js.org/d3.v3.min.js") 
 		self.document.getroot().append(D3Script)
 		
 		scriptElm = inkex.etree.Element(inkex.addNS("script", "svg"))
