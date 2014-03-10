@@ -1899,7 +1899,7 @@ function motion(dir, element, time, options)
 	var path = svg.select("#" + options["pathid"]),
 	startPoint = pathStartPoint(path);
 	var l = path.node().getTotalLength();
-	
+
 	function pathStartPoint(path) {
 		var d = path.attr("d"),
 		dsplitted = d.split(" ");
@@ -1914,25 +1914,25 @@ function motion(dir, element, time, options)
 			length = options["length"];
 
 		fraction = time / length;
+		var p = path.node().getPointAtLength(fraction * l);
 	}
 
 	if (dir == 1)
 	{
 		if (fraction <= 0)
 		{
+		    element.style.display = "inherit";
 			element.setAttribute("transform", "translate(" + startPoint + ")");
-			element.style.display = "none";
 		}
 		else if (fraction >= 1)
 		{
-			element.removeAttribute("transform");
 			element.style.display = "inherit";
 			return true;
 		}
 		else
 		{
 			element.style.display = "inherit";
-			var p = path.node().getPointAtLength(fraction * l);
+			p = path.node().getPointAtLength(fraction * l);
 			element.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
 		}
 	}
@@ -1940,12 +1940,11 @@ function motion(dir, element, time, options)
 	{
 		if (fraction <= 0)
 		{
+			element.style.display = "inherit";
 			element.setAttribute("transform", "translate(" + startPoint + ")");
-			element.style.display = "none";
 		}
 		else if (fraction >= 1)
 		{
-			element.removeAttribute("transform");
 			element.style.display = "inherit";
 			return true;
 		}
