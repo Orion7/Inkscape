@@ -1900,8 +1900,6 @@ function motion(dir, element, time, options)
 	var startPoint = path.node().getPointAtLength(0);
 	var l = path.node().getTotalLength();
 
-	path.style("opacity", 0);
-	
 	if ((time == STATE_END) || (time == STATE_START))
 		fraction = 1;
 	else
@@ -1919,8 +1917,8 @@ function motion(dir, element, time, options)
 	{
 		element.style.display = "inherit";
 		var p = path.node().getPointAtLength(((dir-1)/-2)*l + dir*fraction * l);
-		p.x = p.x - startPoint.x;
-		p.y = p.y - startPoint.y;
+		p.x -= startPoint.x;
+		p.y -= startPoint.y;
 		element.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
 	}
 	
