@@ -1896,15 +1896,11 @@ function motion(dir, element, time, options)
 	var length = 500;
 	var fraction;
 	var svg = d3.select("svg");
-	var path = svg.select("#" + options["pathid"]),
-	startPoint = pathStartPoint(path);
+	var path = svg.select("#" + options["pathid"]);
+	var startPoint = path.node().getPointAtLength(0);
 	var l = path.node().getTotalLength();
 
-	function pathStartPoint(path) {
-		var d = path.attr("d"),
-		dsplitted = d.split(" ");
-		return dsplitted[1].split(",");
-	}
+	path.style("opacity", 0);
 	
 	if ((time == STATE_END) || (time == STATE_START))
 		fraction = 1;
@@ -1912,49 +1908,22 @@ function motion(dir, element, time, options)
 	{
 		if (options && options["length"])
 			length = options["length"];
-
 		fraction = time / length;
-		var p = path.node().getPointAtLength(fraction * l);
 	}
 
-	if (dir == 1)
+	if (fraction >= 1)
 	{
-		if (fraction <= 0)
-		{
-		    element.style.display = "inherit";
-			element.setAttribute("transform", "translate(" + startPoint + ")");
-		}
-		else if (fraction >= 1)
-		{
-			element.style.display = "inherit";
-			return true;
-		}
-		else
-		{
-			element.style.display = "inherit";
-			p = path.node().getPointAtLength(fraction * l);
-			element.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
-		}
+		return true;
 	}
-	else if (dir == -1)
+	else
 	{
-		if (fraction <= 0)
-		{
-			element.style.display = "inherit";
-			element.setAttribute("transform", "translate(" + startPoint + ")");
-		}
-		else if (fraction >= 1)
-		{
-			element.style.display = "inherit";
-			return true;
-		}
-		else
-		{
-			element.style.display = "inherit";
-			var p = path.node().getPointAtLength(l - fraction * l);
-			element.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
-		}
+		element.style.display = "inherit";
+		var p = path.node().getPointAtLength(((dir-1)/-2)*l + dir*fraction * l);
+		p.x = p.x - startPoint.x;
+		p.y = p.y - startPoint.y;
+		element.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
 	}
+	
 	return false;
 }
 
