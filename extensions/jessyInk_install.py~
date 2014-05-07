@@ -56,16 +56,15 @@ class JessyInk_Install(inkex.Effect):
 		# Find and delete old script node
 		for node in self.document.xpath("//svg:script[@id='JessyInk']", namespaces=inkex.NSS):
 			node.getparent().remove(node)
-		for node in self.document.xpath("//svg:script[@id='D3']", namespaces=inkex.NSS):
-			node.getparent().remove(node)	
-		
+			
+		for node in self.document.xpath("//svg:script[@xlink:href='http://d3js.org/d3.v3.min.js']", namespaces=inkex.NSS):
+			node.getparent().remove(node)
 	
 		# Create new script node
 		D3Script = inkex.etree.Element(inkex.addNS("script", "svg"))
-		D3Script.text = open(os.path.join(os.path.dirname(__file__),	"d3.min.js")).read()
-		D3Script.set("id", "D3")
-		self.document.getroot().append(D3Script)		
-
+		D3Script.set("{" + inkex.NSS["xlink"] + "}href", "http://d3js.org/d3.v3.min.js") 
+		self.document.getroot().append(D3Script)
+		
 		scriptElm = inkex.etree.Element(inkex.addNS("script", "svg"))
 		scriptElm.text = open(os.path.join(os.path.dirname(__file__),	"jessyInk.js")).read()
 		scriptElm.set("id","JessyInk")
